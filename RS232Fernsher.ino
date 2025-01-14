@@ -1,3 +1,7 @@
+const int potPin = A0; // Das Potentiometer ist an Pin A0 angeschlossen
+int potValue = 0; // Variable zur Speicherung des ausgelesenen Werts
+int lastPercentage = 0; // Variable zur Speicherung des letzten ausgegebenen Prozentwerts
+
 const int button1Pin = 2; //Button Pins
 const int button2Pin = 3;
 const int button3Pin = 4;
@@ -27,6 +31,18 @@ const byte menuLockOn[9] = {0x38, 0x30, 0x31, 0x73, 0x3E, 0x30, 0x30, 0x31, 0x0D
 const byte menuLockOff[9] = {0x38, 0x30, 0x31, 0x73, 0x3E, 0x30, 0x30, 0x30, 0x0D};
 const byte tastLockOn[9] = {0x38, 0x30, 0x31, 0x73, 0x38, 0x30, 0x30, 0x31, 0x0D};  //Tastensperre
 const byte tastLockOff[9] = {0x38, 0x30, 0x31, 0x73, 0x38, 0x30, 0x30, 0x30, 0x0D};
+
+const byte volume0[9] = {0x38, 0x30, 0x31, 0x73, 0x35, 0x30, 0x30, 0x30, 0x0D};  //Volume 0%
+const byte volume10[9] = {0x38, 0x30, 0x31, 0x73, 0x35, 0x30, 0x31, 0x30, 0x0D};  //Volume 10%
+const byte volume20[9] = {0x38, 0x30, 0x31, 0x73, 0x35, 0x30, 0x32, 0x30, 0x0D};  //Volume 20%
+const byte volume30[9] = {0x38, 0x30, 0x31, 0x73, 0x35, 0x30, 0x33, 0x30, 0x0D};  //Volume 30%
+const byte volume40[9] = {0x38, 0x30, 0x31, 0x73, 0x35, 0x30, 0x34, 0x30, 0x0D};  //Volume 40%
+const byte volume50[9] = {0x38, 0x30, 0x31, 0x73, 0x35, 0x30, 0x35, 0x30, 0x0D};  //Volume 50%
+const byte volume60[9] = {0x38, 0x30, 0x31, 0x73, 0x35, 0x30, 0x36, 0x30, 0x0D};  //Volume 60%
+const byte volume70[9] = {0x38, 0x30, 0x31, 0x73, 0x35, 0x30, 0x37, 0x30, 0x0D};  //Volume 70%
+const byte volume80[9] = {0x38, 0x30, 0x31, 0x73, 0x35, 0x30, 0x38, 0x30, 0x0D};  //Volume 80%
+const byte volume90[9] = {0x38, 0x30, 0x31, 0x73, 0x35, 0x30, 0x39, 0x30, 0x0D};  //Volume 90%
+const byte volume100[9] = {0x38, 0x30, 0x31, 0x73, 0x35, 0x31, 0x30, 0x30, 0x0D};  //Volume 100%
 
 void setup() {
   Serial.begin(9600);
@@ -94,7 +110,53 @@ void loop() {
       default:
         break;
     }
-  }    
-
+  }
+  potValue = analogRead(potPin);
+  int rawPercentage = map(potValue, 0, 1023, 0, 100); // Skaliere den Wert auf einen Prozentwert zwischen 0 und 100
+  int percentage = rawPercentage - (rawPercentage % 10); // Runde den Wert auf den nächsten Zehner
+  if (percentage != lastPercentage) {
+  lastPercentage = percentage;
+  }
+ if(muteState == 0) {
+  if (percentage != lastPercentage) {
+     switch(percentage){
+      case 0: //Volume wird auf 09 gestellt
+        Serial.write(volume0, 9);
+        break;
+      case 10: //Fernseher ist auf USB-C
+        Serial.write(volume10, 9);
+        break;
+      case 20: //Fernseher ist auf HDMI2
+        Serial.write(volume20, 9);
+        break;
+      case 30: //Fernseher ist auf HDMI3
+        Serial.write(volume30, 9);
+        break;
+      case 40: //Fernseher ist auf HDMI3
+        Serial.write(volume40, 9);
+        break;
+      case 50: //Fernseher ist auf HDMI3
+        Serial.write(volume50, 9);
+        break;
+      case 60: //Fernseher ist auf HDMI3
+        Serial.write(volume60, 9);
+        break;
+      case 70: //Fernseher ist auf HDMI3
+        Serial.write(volume70, 9);
+        break;
+      case 80: //Fernseher ist auf HDMI3
+        Serial.write(volume80, 9);
+        break;
+      case 90: //Fernseher ist auf HDMI3
+        Serial.write(volume90, 9);
+        break;
+      case 100: //Fernseher ist auf HDMI3
+        Serial.write(volume100, 9);
+        break;
+      default:
+        break;
+    }    
+  }
+ }
   delay(100); 
 }
