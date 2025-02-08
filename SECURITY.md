@@ -11,7 +11,7 @@
 
 ## Reporting a Vulnerability
 
-If you find a Security Vulnerability please write an E-Mail to:
+If you find a Security Vulnerability please message us via GitHub
 
 
 We will try to reply in at least one Month
