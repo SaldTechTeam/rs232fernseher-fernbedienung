@@ -7,10 +7,10 @@ Ausführliche Informationen gibt es im Wiki
 Um die Fernbedienung zu verwenden, wird ein Arduino mit Serieller Schnittstelle benötigt.
 Außerdem wird ein TTL zu RS232 Konverter benötigt. Dafür empfiehlt sich ein MAX3232-Chip.
 Die Verbindung zwischen Fernseher und Arduino wird über ein selbstgebautes Kabel etabliert.
-Weitere Informationen gibt es [hier.](https://github.com/SaldTechTeam/rs232fernseher-fernbedienung/wiki/hardwarepezifikation)
+Weitere Informationen gibt es [hier.](https://github.com/SaldTechTeam/rs232fernseher-fernbedienung/wiki/hardwarespezifikation)
 
-## Installation
-Detailierte Anleitung [hier](https://github.com/SaldTechTeam/rs232fernseher-fernbedienung/wiki/hardwarepezifikation)
+## Selber bauen
+Detailierte Anleitung [hier](https://github.com/SaldTechTeam/rs232fernseher-fernbedienung/wiki/selber_bauen)
 
 Kurzversion:
 Um das Projekt zu nutzen muss der Arduino mit dem Konverter und den Knöpfen verbunden werden.
