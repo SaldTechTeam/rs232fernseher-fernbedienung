@@ -24,6 +24,6 @@ Daher versuchen wir eine gewisse Rückwärtskompatiblität zu erhalten.
 Falls Fehler auftreten sollten schauen Sie bitte in unserer [Fehlerliste](https://github.com/SaldTechTeam/rs232fernseher-fernbedienung/wiki/fehler), ob wir ihren Fehler schon kennen.
 Sollte dieser dort nicht anzufinden sein oder die vorgeschlagene Lösung nicht funktionieren kontakieren Sie uns bitte über GitHub oder per Mail.
 
-# Alternative zum Selstbau
+# Alternative zum Selbstbau
 Falls Sie das Gerät nicht selbst zusammenbauen wollen, besteht durchaus die Möglichtkeit das Gerät fertig (nach Maß) gebaut zu erhalten.
 Wenn Sie dieses Angebot in Anspruch nehmen möchten kontaktieren Sie uns bitte per Mail.
