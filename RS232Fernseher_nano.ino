@@ -1,3 +1,6 @@
+/* Copyright (c) 2025 Felix Schulze, Jannik Rank. 
+   All Rights reserved. 
+ */
 const int button1Pin = 2; //Button Pins
 const int button2Pin = 3;
 const int button3Pin = 4;
