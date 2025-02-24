@@ -1,12 +1,15 @@
-const int potPin = A0; // Das Potentiometer ist an Pin A0 angeschlossen
-int potValue = 0; // Variable zur Speicherung des ausgelesenen Werts
-int lastPercentage = 40; // Variable zur Speicherung des letzten ausgegebenen Prozentwerts
-
+/* Copyright (c) 2025 Felix Schulze, Jannik Rank. 
+   All Rights reserved. 
+ */
 const int button1Pin = 2; //Button Pins
 const int button2Pin = 3;
 const int button3Pin = 4;
+const int button4Pin = 5;
+const int button5Pin = 6;
+const int button6Pin = 7;
 
-
+int Volume = 0;
+int lastVolume = 10;
 
 int pwrState = 0; // Status des Stroms
 int inpState = 0; // Status des Eingangs
@@ -45,125 +48,164 @@ const byte volume80[9] = {0x38, 0x30, 0x31, 0x73, 0x35, 0x30, 0x38, 0x30, 0x0D};
 const byte volume90[9] = {0x38, 0x30, 0x31, 0x73, 0x35, 0x30, 0x39, 0x30, 0x0D};  //Volume 90%
 const byte volume100[9] = {0x38, 0x30, 0x31, 0x73, 0x35, 0x31, 0x30, 0x30, 0x0D};  //Volume 100%
 
+const byte akzeptieren[9] = {0x38, 0x30, 0x31, 0x73, 0x35, 0x31, 0x30, 0x30, 0x0D};  //Miracast  //nicht fertig
+
+const byte down[9] = {0x38, 0x30, 0x31, 0x73, 0x41, 0x30, 0x30, 0x31, 0x0D};
+const byte right[9] = {0x38, 0x30, 0x31, 0x73, 0x41, 0x30, 0x30, 0x33, 0x0D};
+const byte enter[9] = {0x38, 0x30, 0x31, 0x73, 0x41, 0x30, 0x30, 0x34, 0x0D};
+
 void setup() {
-  Serial1.begin(9600);
+  Serial.begin(9600);
   /*pinMode(button1Pin, INPUT); // Buttonpins
   pinMode(button2Pin, INPUT);
-  pinMode(button3Pin, INPUT);*/
+  pinMode(button3Pin, INPUT);
+  pinMode(button4Pin, INPUT);
+  pinMode(button5Pin, INPUT);*/
 
-  pinMode(button1Pin, INPUT_PULLDOWN); //
-  pinMode(button2Pin, INPUT_PULLDOWN);
-  pinMode(button3Pin, INPUT_PULLDOWN);
+  pinMode(button1Pin,INPUT_PULLUP); // Buttonpins
+  pinMode(button2Pin,INPUT_PULLUP);
+  pinMode(button3Pin,INPUT_PULLUP);
+  pinMode(button4Pin,INPUT_PULLUP);
+  pinMode(button5Pin,INPUT_PULLUP);
+  pinMode(button6Pin,INPUT_PULLUP);
 
-  Serial1.write(inputH1, 9); //Auf HDMI1 stellen
+  Serial.write(inputH1, 9); //Auf HDMI1 stellen
   delay(25);
-  Serial1.write(volume, 9);  //Volume setzen
+  Serial.write(volume, 9);  //Volume setzen
 }
 
 void loop() {
   int buttonState1 = digitalRead(button1Pin);
   int buttonState2 = digitalRead(button2Pin);
   int buttonState3 = digitalRead(button3Pin);
+  int buttonState4 = digitalRead(button4Pin);
+  int buttonState5 = digitalRead(button5Pin);
+  int buttonState6 = digitalRead(button6Pin);
 
-  if (buttonState1 == HIGH) {
+  if (buttonState1 == LOW) {
     switch(pwrState){
       case 0: //Fernseher ist aus
-        Serial1.write(powerOn, 9);
+        Serial.write(powerOn, 9);
         pwrState = 1;
+        delay(100);
         break;
       case 1: //Fernseher ist an
-        Serial1.write(powerOff, 9);
+        Serial.write(powerOff, 9);
         pwrState = 0;
+        delay(100);
         break;
       default:
         break;
     }
   }
-  if (buttonState2 == HIGH) {
+  if (buttonState2 == LOW) {
      switch(inpState){
       case 0: //Fernseher ist auf HDMI1
-        Serial1.write(inputUC, 9);
+        Serial.write(inputUC, 9);
         inpState = 1;
-        lastPercentage = 100;
+        lastVolume = 100;
+        delay(100);
         break;
       case 1: //Fernseher ist auf USB-C
-        Serial1.write(inputH2, 9);
+        Serial.write(inputH2, 9);
         inpState = 2;
-        lastPercentage = 100;
+        lastVolume = 100;
+        delay(100);
         break;
       case 2: //Fernseher ist auf HDMI2
-        Serial1.write(inputH3, 9);
+        Serial.write(inputH3, 9);
         inpState = 3;
-        lastPercentage = 100;
+        lastVolume = 100;
+        delay(100);
         break;
       case 3: //Fernseher ist auf HDMI3
-        Serial1.write(inputH1, 9);
+        Serial.write(inputH1, 9);
         inpState = 0;
-        lastPercentage = 100;
+        lastVolume = 100;
+        delay(100);
         break;
       default:
         break;
     }
   }
-  if (buttonState3 == HIGH) {
+  if (buttonState3 == LOW) {
     switch(muteState){
       case 0: //Fernseher nicht Stummgeschalten
-        Serial1.write(muteOn, 9);
+        Serial.write(muteOn, 9);
         muteState = 1;
+        delay(100);
         break;
       case 1: //Fernseher ist Stummgeschalten
-        Serial1.write(muteOff, 9);
+        Serial.write(muteOff, 9);
         muteState = 0;
+        delay(100);
         break;
       default:
         break;
     }
   }
+  
+  
+  
+ if(muteState == 0) { //ändert nur die Lautstärke, wenn der Fernseher nicht gemutet ist
 
-  potValue = analogRead(potPin);
-  int rawPercentage = map(potValue, 0, 1023, 0, 100); // Skaliere den ausgelesenen Wert auf einen Wert zwischen 0 und 100
-  int percentage = rawPercentage - (rawPercentage % 10); // Runde den Wert auf den nächsten Zehner
- //if(muteState == 0) { //ändert nur die Lautstärke, wenn der Fernseher nicht gemutet ist
-  if (percentage != lastPercentage) { //ändert nur die Lautstärke, wenn sich der Wert verändert, sodass nicht durchgängig die Lautstärke verändert wird.
-      lastPercentage = percentage;
-     switch(percentage){
+if (buttonState4 == LOW) {
+    Volume = Volume + 10;
+    delay(100);
+    }
+  if (buttonState5 == LOW) {
+    if (volume > 0){
+      Volume = Volume -10;
+      delay(100);
+      }
+    }
+if (buttonState6 == LOW) {
+      Serial.write(down, 9);
+      delay(10);
+      Serial.write(right, 9);
+      delay(10);
+      Serial.write(enter, 9);
+      }
+ }
+  if (Volume != lastVolume) { //ändert nur die Lautstärke, wenn sich der Wert verändert, sodass nicht durchgängig die Lautstärke verändert wird.
+      lastVolume = Volume;
+     switch(Volume){
       case 0: //Volume wird auf 0% gestellt
-        Serial1.write(volume0, 9);
+        Serial.write(volume0, 9);
         break;
       case 10: //Volume wird auf 10% gestellt
-        Serial1.write(volume10, 9);
+        Serial.write(volume10, 9);
         break;
       case 20: //Volume wird auf 20% gestellt
-        Serial1.write(volume20, 9);
+        Serial.write(volume20, 9);
         break;
       case 30: //Volume wird auf 30% gestellt
-        Serial1.write(volume30, 9);
+        Serial.write(volume30, 9);
         break;
       case 40: //Volume wird auf 40% gestellt
-        Serial1.write(volume40, 9);
+        Serial.write(volume40, 9);
         break;
       case 50: //Volume wird auf 50% gestellt
-        Serial1.write(volume50, 9);
+        Serial.write(volume50, 9);
         break;
       case 60: //Volume wird auf 60% gestellt
-        Serial1.write(volume60, 9);
+        Serial.write(volume60, 9);
         break;
       case 70: //Volume wird auf 70% gestellt
-        Serial1.write(volume70, 9);
+        Serial.write(volume70, 9);
         break;
       case 80: //Volume wird auf 80% gestellt
-        Serial1.write(volume80, 9);
+        Serial.write(volume80, 9);
         break;
       case 90: //Volume wird auf 90% gestellt
-        Serial1.write(volume90, 9);
+        Serial.write(volume90, 9);
         break;
       case 100: //Volume wird auf 100% gestellt
-        Serial1.write(volume100, 9);
+        Serial.write(volume100, 9);
         break;
       default:
         break;
     }    
   }
- //}
   delay(100); 
 }
