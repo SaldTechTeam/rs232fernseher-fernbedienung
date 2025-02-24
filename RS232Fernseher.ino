@@ -1,3 +1,7 @@
+/* Copyright (c) 2025 Felix Schulze, Jannik Rank. 
+   All Rights reserved. 
+ */
+
 const int potPin = A0; // Das Potentiometer ist an Pin A0 angeschlossen
 int potValue = 0; // Variable zur Speicherung des ausgelesenen Werts
 int lastPercentage = 0; // Variable zur Speicherung des letzten ausgegebenen Prozentwerts
