@@ -1,3 +1,6 @@
+/* Copyright (c) 2025 Felix Schulze, Jannik Rank. 
+   All Rights reserved. 
+ */
 const int button1Pin = 2; //Button Pins
 const int button2Pin = 3;
 const int button3Pin = 4;
@@ -46,6 +49,10 @@ const byte volume90[9] = {0x38, 0x30, 0x31, 0x73, 0x35, 0x30, 0x39, 0x30, 0x0D};
 const byte volume100[9] = {0x38, 0x30, 0x31, 0x73, 0x35, 0x31, 0x30, 0x30, 0x0D};  //Volume 100%
 
 const byte akzeptieren[9] = {0x38, 0x30, 0x31, 0x73, 0x35, 0x31, 0x30, 0x30, 0x0D};  //Volume 100%  //nicht fertig
+
+const byte down[9] = {0x38, 0x30, 0x31, 0x73, 0x41, 0x30, 0x30, 0x31, 0x0D};
+const byte right[9] = {0x38, 0x30, 0x31, 0x73, 0x41, 0x30, 0x30, 0x33, 0x0D};
+const byte enter[9] = {0x38, 0x30, 0x31, 0x73, 0x41, 0x30, 0x30, 0x34, 0x0D};
 
 void setup() {
   Serial.begin(9600);
@@ -150,6 +157,13 @@ void loop() {
         delay(100);
       }
     }
+    if (buttonState6 == HIGH) {
+      Serial.write(down, 9);
+      delay(10);
+      Serial.write(right, 9);
+      delay(10);
+      Serial.write(enter, 9);
+      }
 
     if (Volume != lastVolume) { //ändert nur die Lautstärke, wenn sich der Wert verändert, sodass nicht durchgängig die Lautstärke verändert wird.
       lastVolume = Volume;
