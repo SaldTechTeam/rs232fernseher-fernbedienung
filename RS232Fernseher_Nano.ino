@@ -1,3 +1,7 @@
+/* Copyright (c) 2025 Felix Schulze, Jannik Rank. 
+   All Rights reserved. 
+ */
+
 /*#include <SoftwareSerial.h>
 const byte rxPin = 9;
 const byte txPin = 10;*/
