@@ -1,3 +1,6 @@
+/* Copyright (c) 2025 Felix Schulze, Jannik Rank. 
+   All Rights reserved. 
+ */
 const int button1Pin = 2; //Button Pins
 const int button2Pin = 3;
 const int button3Pin = 4;
@@ -156,6 +159,7 @@ if (buttonState4 == LOW) {
       delay(100);
       }
     }
+ }
 if (buttonState6 == LOW) {
       Serial.write(down, 9);
       delay(10);
@@ -163,7 +167,6 @@ if (buttonState6 == LOW) {
       delay(10);
       Serial.write(enter, 9);
       }
-    }
   
   if (Volume != lastVolume) { //ändert nur die Lautstärke, wenn sich der Wert verändert, sodass nicht durchgängig die Lautstärke verändert wird.
       lastVolume = Volume;
