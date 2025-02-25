@@ -205,6 +205,5 @@ void loop() {
           break;
       }
     }
-  }
   delay(100);
 }
