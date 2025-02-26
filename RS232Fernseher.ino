@@ -159,6 +159,7 @@ if (buttonState4 == LOW) {
       delay(100);
       }
     }
+ }
 if (buttonState6 == LOW) {
       Serial.write(down, 9);
       delay(10);
@@ -166,7 +167,6 @@ if (buttonState6 == LOW) {
       delay(10);
       Serial.write(enter, 9);
       }
- }
   if (Volume != lastVolume) { //ändert nur die Lautstärke, wenn sich der Wert verändert, sodass nicht durchgängig die Lautstärke verändert wird.
       lastVolume = Volume;
      switch(Volume){
