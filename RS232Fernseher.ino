@@ -71,34 +71,23 @@ void setup() {
 
   Serial.write(inputH1, 9); //Auf HDMI1 stellen
   delay(25);
+  Volume = 90; //Volume vielleicht eher so setzen
   Serial.write(volume, 9);  //Volume setzen
 }
 
 void loop() {
-  int buttonState1 = digitalRead(button1Pin);
-  int buttonState2 = digitalRead(button2Pin);
-  int buttonState3 = digitalRead(button3Pin);
-  int buttonState4 = digitalRead(button4Pin);
-  int buttonState5 = digitalRead(button5Pin);
-  int buttonState6 = digitalRead(button6Pin);
+  input();
+  sound();
+  sonstiges();
+  delay(100); 
+} 
+  
 
-  if (buttonState1 == LOW) {
-    switch(pwrState){
-      case 0: //Fernseher ist aus
-        Serial.write(powerOn, 9);
-        pwrState = 1;
-        delay(100);
-        break;
-      case 1: //Fernseher ist an
-        Serial.write(powerOff, 9);
-        pwrState = 0;
-        delay(100);
-        break;
-      default:
-        break;
-    }
-  }
-  if (buttonState2 == LOW) {
+
+void input() {
+   int buttonState2 = digitalRead(button2Pin);
+   
+   if (buttonState2 == LOW) {
      switch(inpState){
       case 0: //Fernseher ist auf HDMI1
         Serial.write(inputUC, 9);
@@ -128,7 +117,14 @@ void loop() {
         break;
     }
   }
-  if (buttonState3 == LOW) {
+}
+
+void sound() {
+   int buttonState3 = digitalRead(button3Pin);
+   int buttonState4 = digitalRead(button4Pin);
+   int buttonState5 = digitalRead(button5Pin);
+
+   if (buttonState3 == LOW) {
     switch(muteState){
       case 0: //Fernseher nicht Stummgeschalten
         Serial.write(muteOn, 9);
@@ -143,31 +139,24 @@ void loop() {
       default:
         break;
     }
-  }
-  
-  
-  
- if(muteState == 0) { //ändert nur die Lautstärke, wenn der Fernseher nicht gemutet ist
-
-if (buttonState4 == LOW) {
-    Volume = Volume + 10;
-    delay(100);
-    }
-  if (buttonState5 == LOW) {
-    if (volume > 0){
-      Volume = Volume -10;
-      delay(100);
+   }
+   
+   if(muteState == 0) { //ändert nur die Lautstärke, wenn der Fernseher nicht gemutet ist
+      if (buttonState4 == LOW) {
+         if (Volume < 100){
+            Volume = Volume + 10;
+            delay(100);
+         }
       }
-    }
- }
-if (buttonState6 == LOW) {
-      Serial.write(down, 9);
-      delay(10);
-      Serial.write(right, 9);
-      delay(10);
-      Serial.write(enter, 9);
+      if (buttonState5 == LOW) {
+         if (Volume > 0){
+            Volume = Volume -10;
+            delay(100);
+         }  
       }
-  if (Volume != lastVolume) { //ändert nur die Lautstärke, wenn sich der Wert verändert, sodass nicht durchgängig die Lautstärke verändert wird.
+   }
+   
+   if (Volume != lastVolume) { //ändert nur die Lautstärke, wenn sich der Wert verändert, sodass nicht durchgängig die Lautstärke verändert wird.
       lastVolume = Volume;
      switch(Volume){
       case 0: //Volume wird auf 0% gestellt
@@ -207,5 +196,33 @@ if (buttonState6 == LOW) {
         break;
     }    
   }
-  delay(100); 
+}
+
+void sonstiges(){
+   int buttonState1 = digitalRead(button1Pin);
+   int buttonState6 = digitalRead(button6Pin);
+
+   if (buttonState1 == LOW) {
+    switch(pwrState){
+      case 0: //Fernseher ist aus
+        Serial.write(powerOn, 9);
+        pwrState = 1;
+        delay(100);
+        break;
+      case 1: //Fernseher ist an
+        Serial.write(powerOff, 9);
+        pwrState = 0;
+        delay(100);
+        break;
+      default:
+        break;
+    }
+   }
+   if (buttonState6 == LOW) {
+      Serial.write(down, 9);
+      delay(10);
+      Serial.write(right, 9);
+      delay(10);
+      Serial.write(enter, 9);
+   }
 }
