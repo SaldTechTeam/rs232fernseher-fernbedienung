@@ -8,7 +8,7 @@ const int button4Pin = 5;
 const int button5Pin = 6;
 const int button6Pin = 7;
 
-int Volume = 0;
+int Volume = 90;
 int lastVolume = 10;
 
 int pwrState = 0; // Status des Stroms
