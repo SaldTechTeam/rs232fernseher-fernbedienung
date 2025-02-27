@@ -1,12 +1,12 @@
 /* Copyright (c) 2025 Felix Schulze, Jannik Rank. 
    All Rights reserved. 
  */
-const int button1Pin = 2; //Button Pins
-const int button2Pin = 3;
-const int button3Pin = 4;
-const int button4Pin = 5;
-const int button5Pin = 6;
-const int button6Pin = 7;
+const int pwrBtnPin = 2; //Button Pins
+const int inpBtnPin = 3;
+const int muteBtnPin = 4;
+const int lvolBtnPin = 5;
+const int hvolBtnPin = 6;
+const int mcBtnPin = 7;
 
 int Volume = 90;
 int lastVolume = 10;
@@ -62,12 +62,12 @@ void setup() {
   pinMode(button4Pin, INPUT);
   pinMode(button5Pin, INPUT);*/
 
-  pinMode(button1Pin,INPUT_PULLUP); // Buttonpins
-  pinMode(button2Pin,INPUT_PULLUP);
-  pinMode(button3Pin,INPUT_PULLUP);
-  pinMode(button4Pin,INPUT_PULLUP);
-  pinMode(button5Pin,INPUT_PULLUP);
-  pinMode(button6Pin,INPUT_PULLUP);
+  pinMode(pwrBtnPin,INPUT_PULLUP); // Buttonpins
+  pinMode(inpBtnPin,INPUT_PULLUP);
+  pinMode(muteBtnPin,INPUT_PULLUP);
+  pinMode(lvolBtnPin,INPUT_PULLUP);
+  pinMode(hvolBtnPin,INPUT_PULLUP);
+  pinMode(mcBtnPin,INPUT_PULLUP);
 
   Serial.write(inputH1, 9); //Auf HDMI1 stellen
   delay(25);
@@ -85,9 +85,9 @@ void loop() {
 
 
 void input() {
-   int buttonState2 = digitalRead(button2Pin);
+   int inpBtnState = digitalRead(inpBtnPin);
    
-   if (buttonState2 == LOW) {
+   if (inpBtnState == LOW) {
      switch(inpState){
       case 0: //Fernseher ist auf HDMI1
         Serial.write(inputUC, 9);
@@ -120,11 +120,11 @@ void input() {
 }
 
 void sound() {
-   int buttonState3 = digitalRead(button3Pin);
-   int buttonState4 = digitalRead(button4Pin);
-   int buttonState5 = digitalRead(button5Pin);
+   int muteBtnState = digitalRead(button3Pin);
+   int hvolBtnState = digitalRead(button4Pin);
+   int lvolBtnState = digitalRead(button5Pin);
 
-   if (buttonState3 == LOW) {
+   if (muteBtnState == LOW) {
     switch(muteState){
       case 0: //Fernseher nicht Stummgeschalten
         Serial.write(muteOn, 9);
@@ -142,13 +142,13 @@ void sound() {
    }
    
    if(muteState == 0) { //ändert nur die Lautstärke, wenn der Fernseher nicht gemutet ist
-      if (buttonState4 == LOW) {
+      if (hvolBtnState == LOW) {
          if (Volume < 100){
             Volume = Volume + 10;
             delay(100);
          }
       }
-      if (buttonState5 == LOW) {
+      if (lvolBtnState == LOW) {
          if (Volume > 0){
             Volume = Volume -10;
             delay(100);
@@ -199,10 +199,10 @@ void sound() {
 }
 
 void sonstiges(){
-   int buttonState1 = digitalRead(button1Pin);
-   int buttonState6 = digitalRead(button6Pin);
+   int pwrBtnState = digitalRead(pwrBtnPin);
+   int mcBtnState = digitalRead(mcBtnPin);
 
-   if (buttonState1 == LOW) {
+   if (pwrBtnState == LOW) {
     switch(pwrState){
       case 0: //Fernseher ist aus
         Serial.write(powerOn, 9);
@@ -218,7 +218,7 @@ void sonstiges(){
         break;
     }
    }
-   if (buttonState6 == LOW) {
+   if (mcBtnState == LOW) {
       Serial.write(down, 9);
       delay(10);
       Serial.write(right, 9);
