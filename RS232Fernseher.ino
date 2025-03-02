@@ -120,9 +120,9 @@ void input() {
 }
 
 void sound() {
-   int muteBtnState = digitalRead(button3Pin);
-   int hvolBtnState = digitalRead(button4Pin);
-   int lvolBtnState = digitalRead(button5Pin);
+   int muteBtnState = digitalRead(muteBtnPin);
+   int hvolBtnState = digitalRead(hvolBtnPin);
+   int lvolBtnState = digitalRead(lvolBtnPin);
 
    if (muteBtnState == LOW) {
     switch(muteState){
