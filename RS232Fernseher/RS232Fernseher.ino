@@ -7,9 +7,11 @@ const int muteBtnPin = 4;
 const int lvolBtnPin = 5;
 const int hvolBtnPin = 6;
 const int mcBtnPin = 7;
+const int lockBtnPin = 8;
 
 int Volume = 90;
 int lastVolume = 10;
+int iteration = 0;
 
 int pwrState = 0; // Status des Stroms
 int inpState = 0; // Status des Eingangs
@@ -35,6 +37,8 @@ const byte menuLockOn[9] = {0x38, 0x30, 0x31, 0x73, 0x3E, 0x30, 0x30, 0x31, 0x0D
 const byte menuLockOff[9] = {0x38, 0x30, 0x31, 0x73, 0x3E, 0x30, 0x30, 0x30, 0x0D};
 const byte tastLockOn[9] = {0x38, 0x30, 0x31, 0x73, 0x38, 0x30, 0x30, 0x31, 0x0D};  //Tastensperre
 const byte tastLockOff[9] = {0x38, 0x30, 0x31, 0x73, 0x38, 0x30, 0x30, 0x30, 0x0D};
+const byte RCULockOn[9] = {0x38, 0x30, 0x31, 0x73, 0x42, 0x30, 0x30, 0x30, 0x0D}; //Fernbedienungssperre
+const byte RCULockOff[9] = {0x38, 0x30, 0x31, 0x73, 0x42, 0x30, 0x30, 0x31, 0x0D};
 
 const byte volume0[9] = {0x38, 0x30, 0x31, 0x73, 0x35, 0x30, 0x30, 0x30, 0x0D};  //Volume 0%
 const byte volume10[9] = {0x38, 0x30, 0x31, 0x73, 0x35, 0x30, 0x31, 0x30, 0x0D};  //Volume 10%
@@ -68,6 +72,7 @@ void setup() {
   pinMode(lvolBtnPin,INPUT_PULLUP);
   pinMode(hvolBtnPin,INPUT_PULLUP);
   pinMode(mcBtnPin,INPUT_PULLUP);
+  pinMode(lockBtnPin,INPUT_PULLUP);
 
   Serial.write(inputH1, 9); //Auf HDMI1 stellen
   delay(25);
@@ -76,6 +81,7 @@ void setup() {
 }
 
 void loop() {
+  sperre();
   input();
   sound();
   sonstiges();
@@ -225,4 +231,23 @@ void sonstiges(){
       delay(10);
       Serial.write(enter, 9);
    }
+}
+
+void sperre(){
+  iteration++;
+  if (iteration >= 50){
+  int lockBtnState = digitalRead(lockBtnPin);
+
+  if (lockBtnState == HIGH){
+    Serial.write(RCULockOn, 9);
+    Serial.write(tastLockOn, 9);
+    Serial.write(menuLockOn, 9);
+  }
+  if (lockBtnState == LOW){
+    Serial.write(RCULockOff, 9);
+    Serial.write(tastLockOff, 9);
+    Serial.write(menuLockOff, 9);
+  }
+  iteration = 0;
+  }
 }
