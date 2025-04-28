@@ -10,10 +10,14 @@ const int mcBtnPin = 7;
 
 int Volume = 90;
 int lastVolume = 10;
+int freezeTimer = 3000;
+int previousMillis = 0;
 
+int freezeState = 0;
 int pwrState = 0; // Status des Stroms
 int inpState = 0; // Status des Eingangs
 int muteState = 0; // Status der Stummschaltung
+int previousmBState = 0;
 
 const byte powerOn[9] = {0x38, 0x30, 0x31, 0x73, 0x21, 0x30, 0x30, 0x31, 0x0D};     //Powerfunktionen
 const byte powerOff[9] = {0x38, 0x30, 0x31, 0x73, 0x21, 0x30, 0x30, 0x30, 0x0D};
@@ -30,6 +34,9 @@ const byte volume[9] = {0x38, 0x30, 0x31, 0x73, 0x35, 0x30, 0x39, 0x30, 0x0D};  
 
 const byte muteOn[9] = {0x38, 0x30, 0x31, 0x73, 0x36, 0x30, 0x30, 0x31, 0x0D}; //Stummschalten
 const byte muteOff[9] = {0x38, 0x30, 0x31, 0x73, 0x36, 0x30, 0x30, 0x30, 0x0D}; //Stummschaltung aufheben
+
+const byte freezeOn[9] = {0x38, 0x30, 0x31, 0x73, 0x2A, 0x30, 0x30, 0x31, 0x0D}; //Freeze an
+const byte freezeOff[9] = {0x38, 0x30, 0x31, 0x73, 0x2A, 0x30, 0x30, 0x30, 0x0D}; //Freeze aus
 
 const byte menuLockOn[9] = {0x38, 0x30, 0x31, 0x73, 0x3E, 0x30, 0x30, 0x31, 0x0D};  //Menüsperre
 const byte menuLockOff[9] = {0x38, 0x30, 0x31, 0x73, 0x3E, 0x30, 0x30, 0x30, 0x0D};
@@ -141,6 +148,29 @@ void sound() {
     }
    }
    
+   if(previousmBState != muteBtnState){
+    previousmBState = muteBtnState;
+    previousMillis = millis();
+   }
+   if(previousmBState == muteBtnState && muteBtnState == LOW){
+    if(millis()-previousMillis >freezeTimer){
+      switch(freezeState) {
+        case 0:
+          Serial.write(freezeOn, 9);
+          freezeState = 1;
+          delay(100);
+          break;
+        case 1:
+          Serial.write(freezeOff, 9);
+          freezeState = 0;
+          delay(100);
+          break;
+        default:
+          break;
+    }
+    }
+   }
+
    if(muteState == 0) { //ändert nur die Lautstärke, wenn der Fernseher nicht gemutet ist
       if (hvolBtnState == LOW) {
          if (Volume < 100){
@@ -156,6 +186,7 @@ void sound() {
       }
    }
    
+
    if (Volume != lastVolume) { //ändert nur die Lautstärke, wenn sich der Wert verändert, sodass nicht durchgängig die Lautstärke verändert wird.
       lastVolume = Volume;
      switch(Volume){
